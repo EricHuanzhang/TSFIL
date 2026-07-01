@@ -2,7 +2,7 @@ import argparse
 import os
 import torch
 from exp.exp_long_term_forecasting import Exp_Long_Term_Forecast
-from exp.exp_causal_forecasting import Exp_Causal_Forecast
+from exp.exp_causal_forecasting_vicreg_uw_v2_b.py import Exp_Causal_Forecast
 from utils.print_args import print_args
 import random
 import numpy as np
