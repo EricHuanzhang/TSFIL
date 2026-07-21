@@ -1,0 +1,115 @@
+Args in experiment:
+[1mBasic Config[0m
+  Task Name:          causal_forecast     Is Training:        1                   
+  Model ID:           ETTh1_96_192        Model:              iTransformer        
+
+[1mData Loader[0m
+  Data:               ETTh1c              Root Path:          ./dataset/ETT/      
+  Data Path:          ETTh1.csv           Features:           MS                  
+  Target:             OT                  Freq:               h                   
+  Checkpoints:        ./checkpoints/      
+
+[1mModel Parameters[0m
+  Top k:              5                   Num Kernels:        6                   
+  Enc In:             7                   Dec In:             7                   
+  C Out:              7                   d model:            512                 
+  n heads:            8                   e layers:           3                   
+  d layers:           1                   d FF:               2048                
+  Moving Avg:         25                  Factor:             3                   
+  Distil:             1                   Dropout:            0.1                 
+  Embed:              timeF               Activation:         gelu                
+  Output Attention:   0                   
+
+[1mRun Parameters[0m
+  Num Workers:        4                   Itr:                1                   
+  Train Epochs:       2                   Batch Size:         32                  
+  Patience:           5                   Learning Rate:      0.0001              
+  Des:                Exp_s2021_K3        Loss:               MSE                 
+  Lradj:              type3               Use Amp:            0                   
+
+[1mGPU[0m
+  Use GPU:            1                   GPU:                0                   
+  Use Multi GPU:      0                   Devices:            0,1,2,3             
+
+[1mDe-stationary Projector Params[0m
+  P Hidden Dims:      128, 128            P Hidden Layers:    2                   
+
+Use GPU: cuda:0
+Exp Causal Forecast-Model: Dual Space Surrogate Wrapper v2_f (精简损失: loss_observed + loss_x_surrogate + 0.1*loss_align + 0.1*loss_suf)
+>>>>>>>start training : causal_forecast_ETTh1_96_192_iTransformer_ETTh1c_ftMS_sl96_ll48_pl192_dm512_nh8_el3_dl1_df2048_fc3_ebtimeF_dtTrue_Exp_s2021_K3_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 8353
+val 2689
+test 2689
+	iters: 50, epoch: 1 | 联合总Loss: 0.6843244 | 观测Loss: 0.1728671
+	speed: 0.1949s/iter; 预计训练剩余总时间: 92.2019s
+	当前Batch不变量最大注意力索引矩阵:
+	 [42 63 70  5 21 49  0]
+	[诊断] 批级路由熵=0.999 逐样本路由熵=0.912 | P_e=[0.332 0.357 0.311] | IRN残差std=1.366 | projY_std=0.108 | 对齐MSE=0.0460
+	iters: 100, epoch: 1 | 联合总Loss: 0.8115580 | 观测Loss: 0.2366109
+	speed: 0.1436s/iter; 预计训练剩余总时间: 60.7409s
+	当前Batch不变量最大注意力索引矩阵:
+	 [75 13 70  5 54 52  0]
+	[诊断] 批级路由熵=0.978 逐样本路由熵=0.884 | P_e=[0.365 0.234 0.401] | IRN残差std=1.482 | projY_std=0.199 | 对齐MSE=0.0659
+	iters: 150, epoch: 1 | 联合总Loss: 0.6454569 | 观测Loss: 0.1815333
+	speed: 0.1419s/iter; 预计训练剩余总时间: 52.9138s
+	当前Batch不变量最大注意力索引矩阵:
+	 [42 93 18  5 21 49  0]
+	[诊断] 批级路由熵=0.975 逐样本路由熵=0.858 | P_e=[0.368 0.227 0.405] | IRN残差std=1.350 | projY_std=0.255 | 对齐MSE=0.0936
+	iters: 200, epoch: 1 | 联合总Loss: 0.7484115 | 观测Loss: 0.2252020
+	speed: 0.1400s/iter; 预计训练剩余总时间: 45.2255s
+	当前Batch不变量最大注意力索引矩阵:
+	 [42 63 70  5 21 49  0]
+	[诊断] 批级路由熵=0.989 逐样本路由熵=0.882 | P_e=[0.263 0.355 0.382] | IRN残差std=1.491 | projY_std=0.257 | 对齐MSE=0.1001
+	iters: 250, epoch: 1 | 联合总Loss: 0.6691270 | 观测Loss: 0.1861724
+	speed: 0.1941s/iter; 预计训练剩余总时间: 52.9916s
+	当前Batch不变量最大注意力索引矩阵:
+	 [75 63 70  5 54 83  0]
+	[诊断] 批级路由熵=0.983 逐样本路由熵=0.877 | P_e=[0.33  0.256 0.414] | IRN残差std=1.389 | projY_std=0.321 | 对齐MSE=0.1453
+Epoch: 1 耗时总长: 43.43500542640686
+Epoch: 1, Steps: 261 | 综合训练Loss: 0.6907547 | 验证集Loss: 0.1188453 | 测试集Loss: 0.0715605
+  [诊断·分项损失] observed=0.19945 x_sur=0.14203 suf=1.72389 align=1.76888
+  [诊断·路由] 批级使用率熵(epoch均值)=0.988 逐样本熵=0.861 | 激活机制数=3/3 | 平均使用率 P_e=[0.334 0.292 0.374]
+    └─ 解读：批级高 + 逐样本低 = 健康特化(不同样本走不同机制)；两者都≈1 = 各样本均匀混合(环境条件化未特化)
+  [诊断·Y代理] IRN残差std=1.3086 | projY_std(VICReg方差锚,目标1)=0.1996 | 闭环对齐MSE=0.0829
+    └─ 解读：projY_std 应稳定≈1（坍缩<0.5→增大 --std_coeff）；IRN残差std≈O(1) 表示 Y 代理在学形状而非趋平凡。
+Validation loss decreased (inf --> 0.071560).  Saving model ...
+Updating learning rate to 0.0001
+	iters: 50, epoch: 2 | 联合总Loss: 0.6087355 | 观测Loss: 0.1748435
+	speed: 6.3678s/iter; 预计训练剩余总时间: 1349.9788s
+	当前Batch不变量最大注意力索引矩阵:
+	 [75 77 70 22 54  9  0]
+	[诊断] 批级路由熵=0.989 逐样本路由熵=0.872 | P_e=[0.284 0.309 0.407] | IRN残差std=1.292 | projY_std=0.314 | 对齐MSE=0.1390
+	iters: 100, epoch: 2 | 联合总Loss: 0.5971118 | 观测Loss: 0.1799193
+	speed: 0.1398s/iter; 预计训练剩余总时间: 22.6471s
+	当前Batch不变量最大注意力索引矩阵:
+	 [75 42 70 22 54 83  0]
+	[诊断] 批级路由熵=0.976 逐样本路由熵=0.859 | P_e=[0.328 0.242 0.43 ] | IRN残差std=1.178 | projY_std=0.271 | 对齐MSE=0.1197
+	iters: 150, epoch: 2 | 联合总Loss: 0.5802834 | 观测Loss: 0.1392908
+	speed: 0.1379s/iter; 预计训练剩余总时间: 15.4400s
+	当前Batch不变量最大注意力索引矩阵:
+	 [75 63 70  5 21 49  0]
+	[诊断] 批级路由熵=0.971 逐样本路由熵=0.889 | P_e=[0.343 0.227 0.43 ] | IRN残差std=1.162 | projY_std=0.326 | 对齐MSE=0.1860
+	iters: 200, epoch: 2 | 联合总Loss: 0.7251033 | 观测Loss: 0.1938565
+	speed: 0.1364s/iter; 预计训练剩余总时间: 8.4546s
+	当前Batch不变量最大注意力索引矩阵:
+	 [75 13 70  5 54 83  0]
+	[诊断] 批级路由熵=0.992 逐样本路由熵=0.903 | P_e=[0.288 0.32  0.392] | IRN残差std=1.490 | projY_std=0.246 | 对齐MSE=0.1105
+	iters: 250, epoch: 2 | 联合总Loss: 0.5096564 | 观测Loss: 0.1364397
+	speed: 0.1396s/iter; 预计训练剩余总时间: 1.6748s
+	当前Batch不变量最大注意力索引矩阵:
+	 [75 13 70 22 54  9  0]
+	[诊断] 批级路由熵=0.987 逐样本路由熵=0.923 | P_e=[0.326 0.268 0.407] | IRN残差std=1.186 | projY_std=0.324 | 对齐MSE=0.1574
+Epoch: 2 耗时总长: 43.96356153488159
+Epoch: 2, Steps: 261 | 综合训练Loss: 0.6248558 | 验证集Loss: 0.1253484 | 测试集Loss: 0.0721276
+  [诊断·分项损失] observed=0.17837 x_sur=0.12353 suf=1.58935 align=1.64017
+  [诊断·路由] 批级使用率熵(epoch均值)=0.982 逐样本熵=0.868 | 激活机制数=3/3 | 平均使用率 P_e=[0.315 0.268 0.416]
+    └─ 解读：批级高 + 逐样本低 = 健康特化(不同样本走不同机制)；两者都≈1 = 各样本均匀混合(环境条件化未特化)
+  [诊断·Y代理] IRN残差std=1.2563 | projY_std(VICReg方差锚,目标1)=0.2882 | 闭环对齐MSE=0.1463
+    └─ 解读：projY_std 应稳定≈1（坍缩<0.5→增大 --std_coeff）；IRN残差std≈O(1) 表示 Y 代理在学形状而非趋平凡。
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 0.0001
+>>>>>>>testing : causal_forecast_ETTh1_96_192_iTransformer_ETTh1c_ftMS_sl96_ll48_pl192_dm512_nh8_el3_dl1_df2048_fc3_ebtimeF_dtTrue_Exp_s2021_K3_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 2689
+真实环境基准校验测试集维度形态: (2689, 1, 192, 1) (2689, 1, 192, 1)
+真实试验验证最终成效评估 >> MSE: 0.07156047970056534, MAE: 0.20429466664791107
+  [诊断·测试期] 归一化路由熵=0.734 | P_e=[0.248 0.501 0.251] | projY_std(VICReg方差锚)=0.1694

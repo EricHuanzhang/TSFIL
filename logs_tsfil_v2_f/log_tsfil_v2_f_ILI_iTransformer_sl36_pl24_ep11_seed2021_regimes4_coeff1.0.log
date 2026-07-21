@@ -1,0 +1,110 @@
+Args in experiment:
+[1mBasic Config[0m
+  Task Name:          causal_forecast     Is Training:        1                   
+  Model ID:           ILI_36_24           Model:              iTransformer        
+
+[1mData Loader[0m
+  Data:               customc             Root Path:          ./dataset/illness/  
+  Data Path:          national_illness.csvFeatures:           MS                  
+  Target:             OT                  Freq:               h                   
+  Checkpoints:        ./checkpoints/      
+
+[1mModel Parameters[0m
+  Top k:              5                   Num Kernels:        6                   
+  Enc In:             7                   Dec In:             7                   
+  C Out:              7                   d model:            512                 
+  n heads:            8                   e layers:           3                   
+  d layers:           1                   d FF:               2048                
+  Moving Avg:         25                  Factor:             3                   
+  Distil:             1                   Dropout:            0.1                 
+  Embed:              timeF               Activation:         gelu                
+  Output Attention:   0                   
+
+[1mRun Parameters[0m
+  Num Workers:        4                   Itr:                1                   
+  Train Epochs:       11                  Batch Size:         32                  
+  Patience:           5                   Learning Rate:      0.0001              
+  Des:                Exp_s2021_K4        Loss:               MSE                 
+  Lradj:              type3               Use Amp:            0                   
+
+[1mGPU[0m
+  Use GPU:            1                   GPU:                0                   
+  Use Multi GPU:      0                   Devices:            0,1,2,3             
+
+[1mDe-stationary Projector Params[0m
+  P Hidden Dims:      128, 128            P Hidden Layers:    2                   
+
+Use GPU: cuda:0
+Exp Causal Forecast-Model: Dual Space Surrogate Wrapper v2_f (精简损失: loss_observed + loss_x_surrogate + 0.1*loss_align + 0.1*loss_suf)
+>>>>>>>start training : causal_forecast_ILI_36_24_iTransformer_customc_ftMS_sl36_ll18_pl24_dm512_nh8_el3_dl1_df2048_fc3_ebtimeF_dtTrue_Exp_s2021_K4_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 617
+val 74
+test 170
+Epoch: 1 耗时总长: 4.470746040344238
+Epoch: 1, Steps: 19 | 综合训练Loss: 0.7598711 | 验证集Loss: 0.1427757 | 测试集Loss: 0.8767870
+  [诊断·分项损失] observed=0.25732 x_sur=0.21845 suf=0.93969 align=1.90136
+  [诊断·路由] 批级使用率熵(epoch均值)=0.994 逐样本熵=0.949 | 激活机制数=4/4 | 平均使用率 P_e=[0.218 0.281 0.237 0.264]
+    └─ 解读：批级高 + 逐样本低 = 健康特化(不同样本走不同机制)；两者都≈1 = 各样本均匀混合(环境条件化未特化)
+  [诊断·Y代理] IRN残差std=0.9593 | projY_std(VICReg方差锚,目标1)=0.1060 | 闭环对齐MSE=0.1024
+    └─ 解读：projY_std 应稳定≈1（坍缩<0.5→增大 --std_coeff）；IRN残差std≈O(1) 表示 Y 代理在学形状而非趋平凡。
+Validation loss decreased (inf --> 0.876787).  Saving model ...
+Updating learning rate to 0.0001
+Epoch: 2 耗时总长: 4.896091461181641
+Epoch: 2, Steps: 19 | 综合训练Loss: 0.5726879 | 验证集Loss: 0.0722241 | 测试集Loss: 0.6879905
+  [诊断·分项损失] observed=0.16778 x_sur=0.15892 suf=0.64137 align=1.81849
+  [诊断·路由] 批级使用率熵(epoch均值)=0.991 逐样本熵=0.901 | 激活机制数=4/4 | 平均使用率 P_e=[0.207 0.252 0.24  0.301]
+    └─ 解读：批级高 + 逐样本低 = 健康特化(不同样本走不同机制)；两者都≈1 = 各样本均匀混合(环境条件化未特化)
+  [诊断·Y代理] IRN残差std=0.7967 | projY_std(VICReg方差锚,目标1)=0.1632 | 闭环对齐MSE=0.0874
+    └─ 解读：projY_std 应稳定≈1（坍缩<0.5→增大 --std_coeff）；IRN残差std≈O(1) 表示 Y 代理在学形状而非趋平凡。
+Validation loss decreased (0.876787 --> 0.687990).  Saving model ...
+Updating learning rate to 0.0001
+Epoch: 3 耗时总长: 3.211120367050171
+Epoch: 3, Steps: 19 | 综合训练Loss: 0.4983387 | 验证集Loss: 0.0669893 | 测试集Loss: 0.7265816
+  [诊断·分项损失] observed=0.12352 x_sur=0.15260 suf=0.46813 align=1.75408
+  [诊断·路由] 批级使用率熵(epoch均值)=0.980 逐样本熵=0.837 | 激活机制数=4/4 | 平均使用率 P_e=[0.196 0.212 0.275 0.318]
+    └─ 解读：批级高 + 逐样本低 = 健康特化(不同样本走不同机制)；两者都≈1 = 各样本均匀混合(环境条件化未特化)
+  [诊断·Y代理] IRN残差std=0.6764 | projY_std(VICReg方差锚,目标1)=0.2242 | 闭环对齐MSE=0.0903
+    └─ 解读：projY_std 应稳定≈1（坍缩<0.5→增大 --std_coeff）；IRN残差std≈O(1) 表示 Y 代理在学形状而非趋平凡。
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 0.0001
+Epoch: 4 耗时总长: 2.8795692920684814
+Epoch: 4, Steps: 19 | 综合训练Loss: 0.4518673 | 验证集Loss: 0.0595527 | 测试集Loss: 0.7110854
+  [诊断·分项损失] observed=0.10801 x_sur=0.13286 suf=0.40420 align=1.70584
+  [诊断·路由] 批级使用率熵(epoch均值)=0.969 逐样本熵=0.766 | 激活机制数=4/4 | 平均使用率 P_e=[0.182 0.183 0.31  0.325]
+    └─ 解读：批级高 + 逐样本低 = 健康特化(不同样本走不同机制)；两者都≈1 = 各样本均匀混合(环境条件化未特化)
+  [诊断·Y代理] IRN残差std=0.6298 | projY_std(VICReg方差锚,目标1)=0.2630 | 闭环对齐MSE=0.0921
+    └─ 解读：projY_std 应稳定≈1（坍缩<0.5→增大 --std_coeff）；IRN残差std≈O(1) 表示 Y 代理在学形状而非趋平凡。
+EarlyStopping counter: 2 out of 5
+Updating learning rate to 0.0001
+Epoch: 5 耗时总长: 2.281698703765869
+Epoch: 5, Steps: 19 | 综合训练Loss: 0.4186610 | 验证集Loss: 0.0494343 | 测试集Loss: 0.7010521
+  [诊断·分项损失] observed=0.09420 x_sur=0.12245 suf=0.35019 align=1.66993
+  [诊断·路由] 批级使用率熵(epoch均值)=0.951 逐样本熵=0.700 | 激活机制数=4/4 | 平均使用率 P_e=[0.179 0.158 0.342 0.322]
+    └─ 解读：批级高 + 逐样本低 = 健康特化(不同样本走不同机制)；两者都≈1 = 各样本均匀混合(环境条件化未特化)
+  [诊断·Y代理] IRN残差std=0.5871 | projY_std(VICReg方差锚,目标1)=0.2775 | 闭环对齐MSE=0.0880
+    └─ 解读：projY_std 应稳定≈1（坍缩<0.5→增大 --std_coeff）；IRN残差std≈O(1) 表示 Y 代理在学形状而非趋平凡。
+EarlyStopping counter: 3 out of 5
+Updating learning rate to 0.0001
+Epoch: 6 耗时总长: 1.4165947437286377
+Epoch: 6, Steps: 19 | 综合训练Loss: 0.3931383 | 验证集Loss: 0.0468143 | 测试集Loss: 0.7272096
+  [诊断·分项损失] observed=0.08633 x_sur=0.11162 suf=0.31325 align=1.63870
+  [诊断·路由] 批级使用率熵(epoch均值)=0.945 逐样本熵=0.657 | 激活机制数=4/4 | 平均使用率 P_e=[0.188 0.143 0.357 0.311]
+    └─ 解读：批级高 + 逐样本低 = 健康特化(不同样本走不同机制)；两者都≈1 = 各样本均匀混合(环境条件化未特化)
+  [诊断·Y代理] IRN残差std=0.5580 | projY_std(VICReg方差锚,目标1)=0.2892 | 闭环对齐MSE=0.0865
+    └─ 解读：projY_std 应稳定≈1（坍缩<0.5→增大 --std_coeff）；IRN残差std≈O(1) 表示 Y 代理在学形状而非趋平凡。
+EarlyStopping counter: 4 out of 5
+Updating learning rate to 0.0001
+Epoch: 7 耗时总长: 1.2969400882720947
+Epoch: 7, Steps: 19 | 综合训练Loss: 0.3719882 | 验证集Loss: 0.0492553 | 测试集Loss: 0.7683464
+  [诊断·分项损失] observed=0.07762 x_sur=0.10458 suf=0.28644 align=1.61141
+  [诊断·路由] 批级使用率熵(epoch均值)=0.948 逐样本熵=0.637 | 激活机制数=4/4 | 平均使用率 P_e=[0.214 0.133 0.368 0.285]
+    └─ 解读：批级高 + 逐样本低 = 健康特化(不同样本走不同机制)；两者都≈1 = 各样本均匀混合(环境条件化未特化)
+  [诊断·Y代理] IRN残差std=0.5320 | projY_std(VICReg方差锚,目标1)=0.2986 | 闭环对齐MSE=0.0872
+    └─ 解读：projY_std 应稳定≈1（坍缩<0.5→增大 --std_coeff）；IRN残差std≈O(1) 表示 Y 代理在学形状而非趋平凡。
+EarlyStopping counter: 5 out of 5
+触发早停条件，系统在纯净不变量边界安全收敛。
+>>>>>>>testing : causal_forecast_ILI_36_24_iTransformer_customc_ftMS_sl36_ll18_pl24_dm512_nh8_el3_dl1_df2048_fc3_ebtimeF_dtTrue_Exp_s2021_K4_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 170
+真实环境基准校验测试集维度形态: (170, 1, 24, 1) (170, 1, 24, 1)
+真实试验验证最终成效评估 >> MSE: 0.6879904270172119, MAE: 0.6006855964660645
+  [诊断·测试期] 归一化路由熵=0.733 | P_e=[0.107 0.188 0.33  0.375] | projY_std(VICReg方差锚)=0.1141

@@ -1,0 +1,97 @@
+Args in experiment:
+[1mBasic Config[0m
+  Task Name:          causal_forecast     Is Training:        1                   
+  Model ID:           Exchange_96_192     Model:              iTransformer        
+
+[1mData Loader[0m
+  Data:               customc             Root Path:          ./dataset/exchange_rate/
+  Data Path:          exchange_rate.csv   Features:           MS                  
+  Target:             OT                  Freq:               h                   
+  Checkpoints:        ./checkpoints/      
+
+[1mModel Parameters[0m
+  Top k:              5                   Num Kernels:        6                   
+  Enc In:             8                   Dec In:             8                   
+  C Out:              8                   d model:            512                 
+  n heads:            8                   e layers:           3                   
+  d layers:           1                   d FF:               2048                
+  Moving Avg:         25                  Factor:             3                   
+  Distil:             1                   Dropout:            0.1                 
+  Embed:              timeF               Activation:         gelu                
+  Output Attention:   0                   
+
+[1mRun Parameters[0m
+  Num Workers:        4                   Itr:                1                   
+  Train Epochs:       2                   Batch Size:         32                  
+  Patience:           5                   Learning Rate:      0.0001              
+  Des:                Exp_s2046_K1        Loss:               MSE                 
+  Lradj:              type3               Use Amp:            0                   
+
+[1mGPU[0m
+  Use GPU:            1                   GPU:                0                   
+  Use Multi GPU:      0                   Devices:            0,1,2,3             
+
+[1mDe-stationary Projector Params[0m
+  P Hidden Dims:      128, 128            P Hidden Layers:    2                   
+
+Use GPU: cuda:0
+Exp Causal Forecast-Model: Dual Space Surrogate Wrapper v2_f (精简损失: loss_observed + loss_x_surrogate + 0.1*loss_align + 0.1*loss_suf)
+>>>>>>>start training : causal_forecast_Exchange_96_192_iTransformer_customc_ftMS_sl96_ll48_pl192_dm512_nh8_el3_dl1_df2048_fc3_ebtimeF_dtTrue_Exp_s2046_K1_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 5024
+val 569
+test 1326
+	iters: 50, epoch: 1 | 联合总Loss: 1.1421089 | 观测Loss: 0.2464086
+	speed: 0.2178s/iter; 预计训练剩余总时间: 57.7179s
+	当前Batch不变量最大注意力索引矩阵:
+	 [52 96 73 47 62 71 33  0]
+	[诊断] 批级路由熵=-0.000 逐样本路由熵=-0.000 | P_e=[1.] | IRN残差std=2.491 | projY_std=0.292 | 对齐MSE=0.1544
+	iters: 100, epoch: 1 | 联合总Loss: 0.7446253 | 观测Loss: 0.1707686
+	speed: 0.2589s/iter; 预计训练剩余总时间: 55.6666s
+	当前Batch不变量最大注意力索引矩阵:
+	 [52 96 73 47 62 71 33  0]
+	[诊断] 批级路由熵=-0.000 逐样本路由熵=-0.000 | P_e=[1.] | IRN残差std=1.697 | projY_std=0.300 | 对齐MSE=0.1089
+	iters: 150, epoch: 1 | 联合总Loss: 1.0077941 | 观测Loss: 0.3255691
+	speed: 0.2548s/iter; 预计训练剩余总时间: 42.0462s
+	当前Batch不变量最大注意力索引矩阵:
+	 [52 96 73 47 62 71 33  0]
+	[诊断] 批级路由熵=-0.000 逐样本路由熵=-0.000 | P_e=[1.] | IRN残差std=1.972 | projY_std=0.383 | 对齐MSE=0.1804
+Epoch: 1 耗时总长: 38.900776624679565
+Epoch: 1, Steps: 157 | 综合训练Loss: 1.0023454 | 验证集Loss: 0.2855008 | 测试集Loss: 0.2116807
+  [诊断·分项损失] observed=0.27323 x_sur=0.13889 suf=4.28343 align=1.61883
+  [诊断·路由] 批级使用率熵(epoch均值)=0.000 逐样本熵=0.000 | 激活机制数=1/1 | 平均使用率 P_e=[1.]
+    └─ 解读：批级高 + 逐样本低 = 健康特化(不同样本走不同机制)；两者都≈1 = 各样本均匀混合(环境条件化未特化)
+  [诊断·Y代理] IRN残差std=2.0481 | projY_std(VICReg方差锚,目标1)=0.2928 | 闭环对齐MSE=0.1387
+    └─ 解读：projY_std 应稳定≈1（坍缩<0.5→增大 --std_coeff）；IRN残差std≈O(1) 表示 Y 代理在学形状而非趋平凡。
+  [诊断·告警] 路由熵偏低(0.000<0.5)，环境路由可能正在坍缩（单机制 num_regimes=1 时熵恒为 0，可忽略）
+Validation loss decreased (inf --> 0.211681).  Saving model ...
+Updating learning rate to 0.0001
+	iters: 50, epoch: 2 | 联合总Loss: 1.1123036 | 观测Loss: 0.2974258
+	speed: 3.6041s/iter; 预计训练剩余总时间: 389.2455s
+	当前Batch不变量最大注意力索引矩阵:
+	 [52 96 73 47 62 71 33  0]
+	[诊断] 批级路由熵=-0.000 逐样本路由熵=-0.000 | P_e=[1.] | IRN残差std=2.253 | projY_std=0.394 | 对齐MSE=0.2048
+	iters: 100, epoch: 2 | 联合总Loss: 0.7539283 | 观测Loss: 0.1710603
+	speed: 0.2259s/iter; 预计训练剩余总时间: 13.1028s
+	当前Batch不变量最大注意力索引矩阵:
+	 [52 96 73 47 62 71 33  0]
+	[诊断] 批级路由熵=-0.000 逐样本路由熵=-0.000 | P_e=[1.] | IRN残差std=1.791 | projY_std=0.335 | 对齐MSE=0.1445
+	iters: 150, epoch: 2 | 联合总Loss: 0.8445992 | 观测Loss: 0.1854717
+	speed: 0.2479s/iter; 预计训练剩余总时间: 1.9830s
+	当前Batch不变量最大注意力索引矩阵:
+	 [52 96 73 47 62 71 33  0]
+	[诊断] 批级路由熵=-0.000 逐样本路由熵=-0.000 | P_e=[1.] | IRN残差std=1.911 | projY_std=0.361 | 对齐MSE=0.1205
+Epoch: 2 耗时总长: 39.19627141952515
+Epoch: 2, Steps: 157 | 综合训练Loss: 0.8037333 | 验证集Loss: 0.5402674 | 测试集Loss: 0.2480240
+  [诊断·分项损失] observed=0.19218 x_sur=0.13778 suf=3.28545 align=1.45223
+  [诊断·路由] 批级使用率熵(epoch均值)=0.000 逐样本熵=0.000 | 激活机制数=1/1 | 平均使用率 P_e=[1.]
+    └─ 解读：批级高 + 逐样本低 = 健康特化(不同样本走不同机制)；两者都≈1 = 各样本均匀混合(环境条件化未特化)
+  [诊断·Y代理] IRN残差std=1.7960 | projY_std(VICReg方差锚,目标1)=0.3973 | 闭环对齐MSE=0.1613
+    └─ 解读：projY_std 应稳定≈1（坍缩<0.5→增大 --std_coeff）；IRN残差std≈O(1) 表示 Y 代理在学形状而非趋平凡。
+  [诊断·告警] 路由熵偏低(0.000<0.5)，环境路由可能正在坍缩（单机制 num_regimes=1 时熵恒为 0，可忽略）
+EarlyStopping counter: 1 out of 5
+Updating learning rate to 0.0001
+>>>>>>>testing : causal_forecast_Exchange_96_192_iTransformer_customc_ftMS_sl96_ll48_pl192_dm512_nh8_el3_dl1_df2048_fc3_ebtimeF_dtTrue_Exp_s2046_K1_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+test 1326
+真实环境基准校验测试集维度形态: (1326, 1, 192, 1) (1326, 1, 192, 1)
+真实试验验证最终成效评估 >> MSE: 0.21168071031570435, MAE: 0.3398550748825073
+  [诊断·测试期] 归一化路由熵=0.000 | P_e=[1.] | projY_std(VICReg方差锚)=0.1322
